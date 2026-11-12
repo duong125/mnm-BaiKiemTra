@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ "Sửa" if book else "Thêm" }} sách{% endblock %}
+{% block content %}
+<h1>{{ "Sửa" if book else "Thêm" }} sách — {{ cat.name }}</h1>
+<div class="card">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="post">
+        <label>Tên sách</label>
+        <input type="text" name="title" value="{{ book.title if book else '' }}" required>
+        <label>Tác giả</label>
+        <input type="text" name="author" value="{{ book.author if book else '' }}" required>
+        <label>Năm xuất bản</label>
+        <input type="number" name="year" value="{{ book.year if book and book.year else '' }}">
+        {% if book and cats %}
+        <label>Danh mục</label>
+        <select name="category_id">
+            {% for c in cats %}
+            <option value="{{ c.id }}" {{ 'selected' if c.id == book.category_id else '' }}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+        <div style="margin-top:18px;display:flex;gap:10px">
+            <button type="submit" class="btn btn-primary">{{ "Cập nhật" if book else "Thêm" }}</button>
+            <a href="{{ url_for('book_list', cat_id=cat.id) }}" class="btn btn-secondary">Hủy</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

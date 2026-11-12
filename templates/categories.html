@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Danh mục - Quản lý Sách{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center">
+    <h1>Danh mục sách</h1>
+    <a href="{{ url_for('category_add') }}" class="btn btn-primary">+ Thêm danh mục</a>
+</div>
+<div class="card" style="margin-top:16px">
+    {% if cats %}
+    <table>
+        <tr><th>Tên</th><th>Mô tả</th><th>Số sách</th><th>Thao tác</th></tr>
+        {% for c in cats %}
+        <tr>
+            <td><a href="{{ url_for('book_list', cat_id=c.id) }}">{{ c.name }}</a></td>
+            <td>{{ c.description }}</td>
+            <td><span class="badge">{{ c.books|length }}</span></td>
+            <td class="actions">
+                <a href="{{ url_for('category_edit', id=c.id) }}" class="btn btn-secondary btn-sm">Sửa</a>
+                <form method="post" action="{{ url_for('category_delete', id=c.id) }}" onsubmit="return confirm('Xóa danh mục {{ c.name }} và tất cả sách trong đó?')">
+                    <button class="btn btn-danger btn-sm">Xóa</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="empty">Chưa có danh mục nào.</p>
+    {% endif %}
+</div>
+{% endblock %}
